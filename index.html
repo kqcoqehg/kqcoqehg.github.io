@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+    <title>使用浏览器打开</title>
+</head>
+<body>
+<div id="tips" style="text-align: center;"></div>
+<script>
+    function getQueryParam(name) {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    function appendParam(url, paramName, paramValue) {
+        let newUrl = new URL(url);
+        newUrl.searchParams.append(paramName, paramValue);
+        return newUrl.toString();
+    }
+
+    window.onload = function () {
+        var ua = navigator.userAgent.toLowerCase();
+        var isQQ = ua.indexOf('qq') != -1;
+        var isWeixin = ua.indexOf('micromessenger') != -1;
+        var isAndroid = ua.indexOf('android') != -1;
+        var isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);
+        // 判断是不是在微信客户端打开
+        if (isWeixin || isQQ) {
+            // 判断是在Android的微信客户端还是Ios的微信客户端
+            //if (isAndroid || isIos) {
+            // Display an image
+            var imgElement = document.createElement("img");
+            imgElement.src = "1.jpg";  // Replace with the path to your image
+            imgElement.style.width = "100%";  // Set the width to 100% of the container
+            document.getElementById("tips").appendChild(imgElement);
+            // } else {
+            //   document.getElementById("tips").innerHTML = notice_openBrowser;
+            // }
+        } else {
+            var uri = getQueryParam('_t');
+            if (!uri) {
+                window.location.href = 'https://news.baidu.com/';
+                return;
+            }
+            var parsedUrl = new URL(uri);
+            var hostname = parsedUrl.hostname;
+
+            uri = appendParam(uri, '_f', 'gitee.io');
+            window.location.href = uri;
+        }
+    };
+</script>
+</body>
+</html>
